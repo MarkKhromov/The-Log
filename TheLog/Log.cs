@@ -4,6 +4,9 @@ namespace TheLog {
     public static class Log {
         public static void ShowMessage(string message, MessageType messageType) {
             switch(messageType) {
+                case MessageType.Default:
+                    ShowMessageCore(message, ConsoleColor.Gray);
+                    break;
                 case MessageType.Error:
                     Error(message);
                     break;
