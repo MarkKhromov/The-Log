@@ -2,6 +2,10 @@
 
 namespace TheLog {
     public static class Log {
+        public static void ShowMessage<T>(T obj, string message, MessageType messageType) {
+            ShowMessage($"{StringConverter.ConvertToString<T>()} - {message}", messageType);
+        }
+
         public static void ShowMessage(string message, MessageType messageType) {
             switch(messageType) {
                 case MessageType.Default:
