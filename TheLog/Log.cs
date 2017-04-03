@@ -19,36 +19,20 @@ namespace TheLog {
                     ShowMessageCore(message, ConsoleColor.Gray);
                     break;
                 case MessageType.Error:
-                    Error(message);
+                    ShowMessageCore(message, ConsoleColor.Red);
                     break;
                 case MessageType.Info:
-                    Info(message);
+                    ShowMessageCore(message, ConsoleColor.Cyan);
                     break;
                 case MessageType.Success:
-                    Success(message);
+                    ShowMessageCore(message, ConsoleColor.Green);
                     break;
                 case MessageType.Warning:
-                    Warning(message);
+                    ShowMessageCore(message, ConsoleColor.Yellow);
                     break;
                 default:
                     throw new NotImplementedException();
             }
-        }
-
-        public static void Success(string message) {
-            ShowMessageCore(message, ConsoleColor.Green);
-        }
-
-        public static void Warning(string message) {
-            ShowMessageCore(message, ConsoleColor.Yellow);
-        }
-
-        public static void Error(string message) {
-            ShowMessageCore(message, ConsoleColor.Red);
-        }
-
-        public static void Info(string message) {
-            ShowMessageCore(message, ConsoleColor.Cyan);
         }
 
         static void ShowMessageCore(string message, ConsoleColor consoleColor) {
