@@ -1,13 +1,14 @@
 ﻿using System;
+using TheLog.Extensions;
 
 namespace TheLog.Demos {
     class Program {
         static void Main(string[] args) {
-            Log.ShowMessage("Default message", MessageType.Default);
-            Log.ShowMessage("Success message", MessageType.Success);
-            Log.ShowMessage("Error message", MessageType.Error);
-            Log.ShowMessage("Info message", MessageType.Info);
-            Log.ShowMessage("Warning message", MessageType.Warning);
+            "Default message".Default();
+            "Success message".Success();
+            "Error message".Error();
+            "Info message".Info();
+            "Warning message".Warning();
 
             Log.Settings.ShowMessageTime = false;
             Log.ShowMessage<DataContainer<int, Data<string>>>("Start initializing", MessageType.Info);
