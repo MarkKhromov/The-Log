@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Globalization;
 
 namespace TheLog {
     public static class Log {
+        public static readonly LogSettings Settings = new LogSettings();
+
         public static void ShowMessage<T>(T obj, string message, MessageType messageType) {
             ShowMessage<T>(message, messageType);
         }
@@ -50,6 +53,9 @@ namespace TheLog {
 
         static void ShowMessageCore(string message, ConsoleColor consoleColor) {
             var oldConsoleColor = Console.ForegroundColor;
+            if(Settings.ShowMessageTime) {
+                Console.Write($"{DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture)}: ");
+            }
             Console.ForegroundColor = consoleColor;
             Console.WriteLine(message);
             Console.ForegroundColor = oldConsoleColor;
