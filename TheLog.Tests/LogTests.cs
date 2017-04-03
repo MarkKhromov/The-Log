@@ -7,6 +7,7 @@ namespace TheLog.Tests {
     public class LogTests {
         [SetUp]
         protected void SetUp() {
+            Log.Settings.ShowMessageTime = false;
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
         }
 
