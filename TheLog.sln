@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLog", "TheLog\TheLog.csproj", "{968EF723-0186-4600-9C3B-674F480F7333}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLog.Tests", "TheLog.Tests\TheLog.Tests.csproj", "{11DE09EE-338C-4989-A2AE-D0565D84CF91}"
+	ProjectSection(ProjectDependencies) = postProject
+		{968EF723-0186-4600-9C3B-674F480F7333} = {968EF723-0186-4600-9C3B-674F480F7333}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLog.Demos", "TheLog.Demos\TheLog.Demos.csproj", "{C3EB58AC-C1AD-4FAC-B409-B45105A10EB2}"
 	ProjectSection(ProjectDependencies) = postProject
