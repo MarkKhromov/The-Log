@@ -1,5 +1,5 @@
 ﻿namespace TheLog {
-    public class LogSettings {
+    public sealed class LogSettings {
         internal LogSettings() { }
 
         public bool ShowMessageTime = true;
