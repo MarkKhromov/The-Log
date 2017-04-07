@@ -18,7 +18,7 @@ namespace TheLog {
         public static void ShowMessage(string message, MessageType messageType) {
             switch(messageType) {
                 case MessageType.Default:
-                    ShowMessageCore(message, ConsoleColor.Gray);
+                    ShowMessageCore(message, Console.ForegroundColor);
                     break;
                 case MessageType.Error:
                     ShowMessageCore(message, ConsoleColor.Red);
