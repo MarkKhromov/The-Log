@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 
 namespace TheLog.Tests {
@@ -56,6 +58,20 @@ namespace TheLog.Tests {
                 Console.SetOut(stringWriter);
                 Log.ShowMessage(instance, "Test message", MessageType.Default);
                 var expectedString = "Int32 - Test message";
+                Assert.AreEqual(expectedString, stringWriter.ToString().Replace(Environment.NewLine, string.Empty));
+            }
+        }
+
+        [Test]
+        public void ShowExecutionTimeTest() {
+            using(var stringWriter = new StringWriter()) {
+                Console.SetOut(stringWriter);
+                Log.ShowExecutionTime(() => TestClass.Sleep(1));
+                var resultString = stringWriter.ToString();
+                var executionTimeString = resultString.Substring(resultString.LastIndexOf('(') + 1);
+                executionTimeString = executionTimeString.Remove(executionTimeString.LastIndexOf(')'));
+                var executionTime = TimeSpan.ParseExact(executionTimeString, @"mm\:ss\.fff", CultureInfo.InvariantCulture);
+                var expectedString = $"() => Sleep(1) ({executionTime.ToString(@"mm\:ss\.fff", CultureInfo.InvariantCulture)})";
                 Assert.AreEqual(expectedString, stringWriter.ToString().Replace(Environment.NewLine, string.Empty));
             }
         }
