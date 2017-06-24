@@ -68,8 +68,8 @@ namespace TheLog.Tests {
                 var resultString = stringWriter.ToString();
                 var executionTimeString = resultString.Substring(resultString.LastIndexOf('(') + 1);
                 executionTimeString = executionTimeString.Remove(executionTimeString.LastIndexOf(')'));
-                var executionTime = TimeSpan.ParseExact(executionTimeString, @"mm\:ss\.fff", CultureInfo.InvariantCulture);
-                var expectedString = $"() => Sleep(1) ({executionTime.ToString(@"mm\:ss\.fff", CultureInfo.InvariantCulture)})";
+                var executionTime = TimeSpan.ParseExact(executionTimeString, Log.Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture);
+                var expectedString = $"() => Sleep(1) ({executionTime.ToString(Log.Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})";
                 Assert.AreEqual(expectedString, stringWriter.ToString().Replace(Environment.NewLine, string.Empty));
             }
         }

@@ -43,7 +43,7 @@ namespace TheLog {
             action.Compile()();
             stopWatch.Stop();
             var actionString = StringConverter.ConvertToString(action);
-            ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(@"mm\:ss\.fff", CultureInfo.InvariantCulture)})", MessageType.Default);
+            ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})", MessageType.Default);
         }
 
         // TODO: Refactoring. May be I can create something like a IColorProvider
@@ -51,7 +51,7 @@ namespace TheLog {
             var oldConsoleColor = Console.ForegroundColor;
             DateTime? now = null;
             if(Settings.ShowMessageTime) {
-                Console.Write($"{(now = DateTime.Now).Value.ToString("HH:mm:ss", CultureInfo.InvariantCulture)}: ");
+                Console.Write($"{(now = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
             }
             Console.ForegroundColor = consoleColor;
             Console.WriteLine(message);

@@ -14,8 +14,8 @@ namespace TheLog.Tests {
                 Log.Settings.ShowMessageTime = true;
                 Log.ShowMessage("Test message with time", MessageType.Default);
                 var resultString = stringWriter.ToString().Replace(Environment.NewLine, string.Empty);
-                var timeString = DateTime.ParseExact(new string(resultString.Take(8).ToArray()), "HH:mm:ss", CultureInfo.InvariantCulture);
-                Assert.AreEqual($"{timeString.ToString("HH:mm:ss", CultureInfo.InvariantCulture)}: Test message with time", resultString);
+                var timeString = DateTime.ParseExact(new string(resultString.Take(8).ToArray()), Log.Settings.MessageTimeFormat, CultureInfo.InvariantCulture);
+                Assert.AreEqual($"{timeString.ToString(Log.Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: Test message with time", resultString);
             }
         }
     }
