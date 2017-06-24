@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 namespace TheLog {
     public static class Log {
         public static readonly LogSettings Settings = new LogSettings();
+        public static readonly LogHistory History = new LogHistory();
 
         public static void ShowMessage<T>(T obj, string message, MessageType messageType) {
             ShowMessage<T>(message, messageType);
@@ -18,19 +19,19 @@ namespace TheLog {
         public static void ShowMessage(string message, MessageType messageType) {
             switch(messageType) {
                 case MessageType.Default:
-                    ShowMessageCore(message, Console.ForegroundColor);
+                    ShowMessageCore(message, Console.ForegroundColor, messageType);
                     break;
                 case MessageType.Error:
-                    ShowMessageCore(message, ConsoleColor.Red);
+                    ShowMessageCore(message, ConsoleColor.Red, messageType);
                     break;
                 case MessageType.Info:
-                    ShowMessageCore(message, ConsoleColor.Cyan);
+                    ShowMessageCore(message, ConsoleColor.Cyan, messageType);
                     break;
                 case MessageType.Success:
-                    ShowMessageCore(message, ConsoleColor.Green);
+                    ShowMessageCore(message, ConsoleColor.Green, messageType);
                     break;
                 case MessageType.Warning:
-                    ShowMessageCore(message, ConsoleColor.Yellow);
+                    ShowMessageCore(message, ConsoleColor.Yellow, messageType);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -45,13 +46,18 @@ namespace TheLog {
             ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(@"mm\:ss\.fff", CultureInfo.InvariantCulture)})", MessageType.Default);
         }
 
-        static void ShowMessageCore(string message, ConsoleColor consoleColor) {
+        // TODO: Refactoring. May be I can create something like a IColorProvider
+        static void ShowMessageCore(string message, ConsoleColor consoleColor, MessageType messageType) {
             var oldConsoleColor = Console.ForegroundColor;
+            DateTime? now = null;
             if(Settings.ShowMessageTime) {
-                Console.Write($"{DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture)}: ");
+                Console.Write($"{(now = DateTime.Now).Value.ToString("HH:mm:ss", CultureInfo.InvariantCulture)}: ");
             }
             Console.ForegroundColor = consoleColor;
             Console.WriteLine(message);
+            if(Settings.EnableHistory) {
+                History.Add(now, message, messageType);
+            }
             Console.ForegroundColor = oldConsoleColor;
         }
     }

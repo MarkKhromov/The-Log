@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace TheLog.Tests {
     [TestFixture]
-    public class LogSettingsTests {
+    public class LogSettingsTests : LogTestFixtureBase {
         [Test]
         public void ShowMessageTimeTest() {
             using(var stringWriter = new StringWriter()) {

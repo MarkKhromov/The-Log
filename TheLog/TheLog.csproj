@@ -32,6 +32,8 @@
   <ItemGroup>
     <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogHistory.cs" />
+    <Compile Include="LogHistoryRecord.cs" />
     <Compile Include="LogSettings.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

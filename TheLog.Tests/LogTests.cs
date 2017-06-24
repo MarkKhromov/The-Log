@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Threading;
 using NUnit.Framework;
 
 namespace TheLog.Tests {
     [TestFixture]
-    public class LogTests {
-        [SetUp]
-        protected void SetUp() {
+    public class LogTests : LogTestFixtureBase {
+        protected override void SetUp() {
             Log.Settings.ShowMessageTime = false;
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
         }
