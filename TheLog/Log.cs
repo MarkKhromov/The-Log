@@ -17,24 +17,11 @@ namespace TheLog {
         }
 
         public static void ShowMessage(string message, MessageType messageType) {
-            switch(messageType) {
-                case MessageType.Default:
-                    ShowMessageCore(message, Console.ForegroundColor, messageType);
-                    break;
-                case MessageType.Error:
-                    ShowMessageCore(message, ConsoleColor.Red, messageType);
-                    break;
-                case MessageType.Info:
-                    ShowMessageCore(message, ConsoleColor.Cyan, messageType);
-                    break;
-                case MessageType.Success:
-                    ShowMessageCore(message, ConsoleColor.Green, messageType);
-                    break;
-                case MessageType.Warning:
-                    ShowMessageCore(message, ConsoleColor.Yellow, messageType);
-                    break;
-                default:
-                    throw new NotImplementedException();
+            DateTime? time;
+            var color = Settings.ColorProvider.GetColor(messageType);
+            ShowMessageCore(out time, message, color);
+            if(Settings.EnableHistory) {
+                History.Add(time, message, messageType);
             }
         }
 
@@ -46,19 +33,16 @@ namespace TheLog {
             ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})", MessageType.Default);
         }
 
-        // TODO: Refactoring. May be I can create something like a IColorProvider
-        static void ShowMessageCore(string message, ConsoleColor consoleColor, MessageType messageType) {
-            var oldConsoleColor = Console.ForegroundColor;
-            DateTime? now = null;
+        // TODO: Make color as generic template type
+        static void ShowMessageCore(out DateTime? time, string message, object color) {
+            time = null;
+            var currentColor = Settings.ColorProvider.GetCurrentColor();
             if(Settings.ShowMessageTime) {
-                Console.Write($"{(now = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                Settings.MessageProvider.ShowMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
             }
-            Console.ForegroundColor = consoleColor;
-            Console.WriteLine(message);
-            if(Settings.EnableHistory) {
-                History.Add(now, message, messageType);
-            }
-            Console.ForegroundColor = oldConsoleColor;
+            Settings.ColorProvider.SetColor(color);
+            Settings.MessageProvider.ShowMessageLine(message);
+            Settings.ColorProvider.SetColor(currentColor);
         }
     }
 }

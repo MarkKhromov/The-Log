@@ -7,4 +7,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Library for logging.")]
 [assembly: ComVisible(false)]
 [assembly: Guid("968ef723-0186-4600-9c3b-674f480f7333")]
-[assembly: AssemblyVersion("1.1.3")]
+[assembly: AssemblyVersion("1.2.0")]

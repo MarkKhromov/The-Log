@@ -37,6 +37,12 @@
     <Compile Include="LogSettings.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Base\IColorProvider.cs" />
+    <Compile Include="Providers\Base\IMessageProvider.cs" />
+    <Compile Include="Providers\ConsoleColorProvider.cs" />
+    <Compile Include="Providers\ConsoleMessageProvider.cs" />
+    <Compile Include="Providers\EmptyColorProvider.cs" />
+    <Compile Include="Providers\EmptyMessageProvider.cs" />
     <Compile Include="StringConverter.cs" />
   </ItemGroup>
   <ItemGroup>
