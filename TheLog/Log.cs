@@ -2,30 +2,53 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq.Expressions;
+using TheLog.Providers.Base;
 
 namespace TheLog {
-    public static class Log {
-        public static readonly LogSettings Settings = new LogSettings();
-        public static readonly LogHistory History = new LogHistory();
+    public sealed class Log<TColor> {
+        public static Log<TColor> Get() {
+            if(Instance == null) {
+                throw new InvalidOperationException();
+            }
+            return Instance;
+        }
 
-        public static void ShowMessage<T>(T obj, string message, MessageType messageType) {
+        public static Log<TColor> Create(IMessageProvider messageProvider, IColorProvider<TColor> colorProvider) {
+            return Instance = new Log<TColor>(messageProvider, colorProvider);
+        }
+
+        static Log<TColor> Instance;
+
+        Log(IMessageProvider messageProvider, IColorProvider<TColor> colorProvider) {
+            this.messageProvider = messageProvider;
+            this.colorProvider = colorProvider;
+            Instance = this;
+        }
+
+        public readonly LogSettings Settings = new LogSettings();
+        public readonly LogHistory History = new LogHistory();
+
+        readonly IMessageProvider messageProvider;
+        readonly IColorProvider<TColor> colorProvider;
+
+        public void ShowMessage<T>(T obj, string message, MessageType messageType) {
             ShowMessage<T>(message, messageType);
         }
 
-        public static void ShowMessage<T>(string message, MessageType messageType) {
+        public void ShowMessage<T>(string message, MessageType messageType) {
             ShowMessage($"{StringConverter.ConvertToString<T>()} - {message}", messageType);
         }
 
-        public static void ShowMessage(string message, MessageType messageType) {
+        public void ShowMessage(string message, MessageType messageType) {
             DateTime? time;
-            var color = Settings.ColorProvider.GetColor(messageType);
+            var color = colorProvider.GetColor(messageType);
             ShowMessageCore(out time, message, color);
             if(Settings.EnableHistory) {
                 History.Add(time, message, messageType);
             }
         }
 
-        public static void ShowExecutionTime(Expression<Action> action) {
+        public void ShowExecutionTime(Expression<Action> action) {
             var stopWatch = Stopwatch.StartNew();
             action.Compile()();
             stopWatch.Stop();
@@ -33,16 +56,15 @@ namespace TheLog {
             ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})", MessageType.Default);
         }
 
-        // TODO: Make color as generic template type
-        static void ShowMessageCore(out DateTime? time, string message, object color) {
+        void ShowMessageCore(out DateTime? time, string message, TColor color) {
             time = null;
-            var currentColor = Settings.ColorProvider.GetCurrentColor();
+            var currentColor = colorProvider.GetCurrentColor();
             if(Settings.ShowMessageTime) {
-                Settings.MessageProvider.ShowMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                messageProvider.ShowMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
             }
-            Settings.ColorProvider.SetColor(color);
-            Settings.MessageProvider.ShowMessageLine(message);
-            Settings.ColorProvider.SetColor(currentColor);
+            colorProvider.SetColor(color);
+            messageProvider.ShowMessageLine(message);
+            colorProvider.SetColor(currentColor);
         }
     }
 }

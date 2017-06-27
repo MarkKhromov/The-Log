@@ -2,11 +2,11 @@
 using TheLog.Providers.Base;
 
 namespace TheLog.Providers {
-    public class ConsoleColorProvider : IColorProvider {
-        object IColorProvider.GetColor(MessageType messageType) {
+    public class ConsoleColorProvider : IColorProvider<ConsoleColor> {
+        ConsoleColor IColorProvider<ConsoleColor>.GetColor(MessageType messageType) {
             switch(messageType) {
                 case MessageType.Default:
-                    return ((IColorProvider)this).GetCurrentColor();
+                    return ((IColorProvider<ConsoleColor>)this).GetCurrentColor();
                 case MessageType.Error:
                     return ConsoleColor.Red;
                 case MessageType.Info:
@@ -20,11 +20,11 @@ namespace TheLog.Providers {
             }
         }
 
-        object IColorProvider.GetCurrentColor() {
+        ConsoleColor IColorProvider<ConsoleColor>.GetCurrentColor() {
             return Console.ForegroundColor;
         }
 
-        void IColorProvider.SetColor(object color) {
+        void IColorProvider<ConsoleColor>.SetColor(ConsoleColor color) {
             Console.ForegroundColor = (ConsoleColor)color;
         }
     }

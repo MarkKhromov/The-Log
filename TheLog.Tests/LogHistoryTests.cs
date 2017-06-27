@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace TheLog.Tests {
     [TestFixture]
-    public class LogHistoryTests {
+    public class LogHistoryTests : LogTestFixtureBase {
         [Test]
         public void GetLogRecordsByMessageTypeTest() {
             using(var stringWriter = new StringWriter()) {

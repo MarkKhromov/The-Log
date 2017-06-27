@@ -3,7 +3,7 @@
 
     class DataContainer<T1, T2> {
         public DataContainer() {
-            Log.ShowMessage(this, "Initialized", MessageType.Info);
+            Program.Log.ShowMessage(this, "Initialized", MessageType.Info);
         }
     }
 }

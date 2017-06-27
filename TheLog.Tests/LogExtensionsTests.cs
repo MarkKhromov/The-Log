@@ -14,27 +14,27 @@ namespace TheLog.Tests {
 
         [Test]
         public void DefaultTest() {
-            CheckShowMessageViaMethod("Default message", LogExtensions.Default);
+            CheckShowMessageViaMethod("Default message", LogExtensions.Default<ConsoleColor>);
         }
 
         [Test]
         public void SuccessTest() {
-            CheckShowMessageViaMethod("Success message", LogExtensions.Success);
+            CheckShowMessageViaMethod("Success message", LogExtensions.Success<ConsoleColor>);
         }
 
         [Test]
         public void ErrorTest() {
-            CheckShowMessageViaMethod("Error message", LogExtensions.Error);
+            CheckShowMessageViaMethod("Error message", LogExtensions.Error<ConsoleColor>);
         }
 
         [Test]
         public void InfoTest() {
-            CheckShowMessageViaMethod("Info message", LogExtensions.Info);
+            CheckShowMessageViaMethod("Info message", LogExtensions.Info<ConsoleColor>);
         }
 
         [Test]
         public void WarningTest() {
-            CheckShowMessageViaMethod("Warning message", LogExtensions.Warning);
+            CheckShowMessageViaMethod("Warning message", LogExtensions.Warning<ConsoleColor>);
         }
 
         void CheckShowMessageViaMethod(string message, Action<string> showMessage) {
