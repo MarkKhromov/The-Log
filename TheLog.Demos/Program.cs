@@ -5,14 +5,14 @@ using TheLog.Providers;
 
 namespace TheLog.Demos {
     class Program {
-        internal static Log<ConsoleColor> Log = Log<ConsoleColor>.Create(new ConsoleMessageProvider(), new ConsoleColorProvider());
+        internal static Log<string, ConsoleColor> Log = Log<string, ConsoleColor>.Create(new ConsoleMessageProvider(), new ConsoleColorProvider());
 
         static void Main(string[] args) {
-            "Default message".Default<ConsoleColor>();
-            "Success message".Success<ConsoleColor>();
-            "Error message".Error<ConsoleColor>();
-            "Info message".Info<ConsoleColor>();
-            "Warning message".Warning<ConsoleColor>();
+            "Default message".Default(Log);
+            "Success message".Success(Log);
+            "Error message".Error(Log);
+            "Info message".Info(Log);
+            "Warning message".Warning(Log);
 
             Log.ShowMessage<DataContainer<int, Data<string>>>("Start initializing", MessageType.Info);
             new DataContainer<int, Data<string>>();

@@ -5,21 +5,21 @@ using System.Linq.Expressions;
 using TheLog.Providers.Base;
 
 namespace TheLog {
-    public sealed class Log<TColor> {
-        public static Log<TColor> Get() {
+    public sealed class Log<TMessage, TColor> {
+        public static Log<TMessage, TColor> Get() {
             if(Instance == null) {
                 throw new InvalidOperationException();
             }
             return Instance;
         }
 
-        public static Log<TColor> Create(IMessageProvider messageProvider, IColorProvider<TColor> colorProvider) {
-            return Instance = new Log<TColor>(messageProvider, colorProvider);
+        public static Log<TMessage, TColor> Create(IMessageProvider<TMessage> messageProvider, IColorProvider<TColor> colorProvider) {
+            return Instance = new Log<TMessage, TColor>(messageProvider, colorProvider);
         }
 
-        static Log<TColor> Instance;
+        static Log<TMessage, TColor> Instance;
 
-        Log(IMessageProvider messageProvider, IColorProvider<TColor> colorProvider) {
+        Log(IMessageProvider<TMessage> messageProvider, IColorProvider<TColor> colorProvider) {
             this.messageProvider = messageProvider;
             this.colorProvider = colorProvider;
             Instance = this;
@@ -28,7 +28,7 @@ namespace TheLog {
         public readonly LogSettings Settings = new LogSettings();
         public readonly LogHistory History = new LogHistory();
 
-        readonly IMessageProvider messageProvider;
+        readonly IMessageProvider<TMessage> messageProvider;
         readonly IColorProvider<TColor> colorProvider;
 
         public void ShowMessage<T>(T obj, string message, MessageType messageType) {
@@ -56,14 +56,16 @@ namespace TheLog {
             ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})", MessageType.Default);
         }
 
-        void ShowMessageCore(out DateTime? time, string message, TColor color) {
+        // TODO: Refactoring.
+        void ShowMessageCore(out DateTime? time, string messageText, TColor color) {
             time = null;
             var currentColor = colorProvider.GetCurrentColor();
             if(Settings.ShowMessageTime) {
-                messageProvider.ShowMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                var message = messageProvider.CreateMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                messageProvider.ShowMessage(message);
             }
             colorProvider.SetColor(color);
-            messageProvider.ShowMessageLine(message);
+            messageProvider.ShowMessageLine(messageProvider.CreateMessage(messageText));
             colorProvider.SetColor(currentColor);
         }
     }

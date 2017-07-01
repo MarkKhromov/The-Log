@@ -14,33 +14,33 @@ namespace TheLog.Tests {
 
         [Test]
         public void DefaultTest() {
-            CheckShowMessageViaMethod("Default message", LogExtensions.Default<ConsoleColor>);
+            CheckShowMessageViaMethod("Default message", LogExtensions.Default);
         }
 
         [Test]
         public void SuccessTest() {
-            CheckShowMessageViaMethod("Success message", LogExtensions.Success<ConsoleColor>);
+            CheckShowMessageViaMethod("Success message", LogExtensions.Success);
         }
 
         [Test]
         public void ErrorTest() {
-            CheckShowMessageViaMethod("Error message", LogExtensions.Error<ConsoleColor>);
+            CheckShowMessageViaMethod("Error message", LogExtensions.Error);
         }
 
         [Test]
         public void InfoTest() {
-            CheckShowMessageViaMethod("Info message", LogExtensions.Info<ConsoleColor>);
+            CheckShowMessageViaMethod("Info message", LogExtensions.Info);
         }
 
         [Test]
         public void WarningTest() {
-            CheckShowMessageViaMethod("Warning message", LogExtensions.Warning<ConsoleColor>);
+            CheckShowMessageViaMethod("Warning message", LogExtensions.Warning);
         }
 
-        void CheckShowMessageViaMethod(string message, Action<string> showMessage) {
+        void CheckShowMessageViaMethod(string message, Action<string, Log<string, ConsoleColor>> showMessage) {
             using(var stringWriter = new StringWriter()) {
                 Console.SetOut(stringWriter);
-                showMessage(message);
+                showMessage(message, Log);
                 Assert.AreEqual(message, stringWriter.ToString().Replace(Environment.NewLine, string.Empty));
             }
         }

@@ -2,12 +2,16 @@
 using TheLog.Providers.Base;
 
 namespace TheLog.Providers {
-    public class ConsoleMessageProvider : IMessageProvider {
-        void IMessageProvider.ShowMessage(string message) {
+    public class ConsoleMessageProvider : IMessageProvider<string> {
+        string IMessageProvider<string>.CreateMessage(string messageText) {
+            return messageText;
+        }
+
+        void IMessageProvider<string>.ShowMessage(string message) {
             Console.Write(message);
         }
 
-        void IMessageProvider.ShowMessageLine(string message) {
+        void IMessageProvider<string>.ShowMessageLine(string message) {
             Console.WriteLine(message);
         }
     }
