@@ -18,5 +18,17 @@ namespace TheLog.Tests {
                 Assert.AreEqual($"{timeString.ToString(Log.Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: Test message with time", resultString);
             }
         }
+
+        [Test]
+        public void MessageTimeSeparatorTest() {
+            using(var stringWriter = new StringWriter()) {
+                Console.SetOut(stringWriter);
+                Log.Settings.MessageTimeSeparator = " - TEST - ";
+                Log.ShowMessage("Test message", MessageType.Default);
+                var resultString = stringWriter.ToString().Replace(Environment.NewLine, string.Empty);
+                var timeString = DateTime.ParseExact(new string(resultString.Take(8).ToArray()), Log.Settings.MessageTimeFormat, CultureInfo.InvariantCulture);
+                Assert.AreEqual($"{timeString.ToString(Log.Settings.MessageTimeFormat, CultureInfo.InvariantCulture)} - TEST - Test message", resultString);
+            }
+        }
     }
 }

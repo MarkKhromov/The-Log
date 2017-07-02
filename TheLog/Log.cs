@@ -46,7 +46,8 @@ namespace TheLog {
             var currentColor = colorProvider.GetCurrentColor();
             if(Settings.ShowMessageTime) {
                 time = DateTime.Now;
-                var timeMessage = messageProvider.CreateMessage($"{time.Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                var timeString = time.Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture);
+                var timeMessage = messageProvider.CreateMessage($"{timeString}{Settings.MessageTimeSeparator}");
                 messageProvider.ShowMessage(timeMessage);
             }
             colorProvider.SetColor(color);
