@@ -26,23 +26,32 @@ namespace TheLog {
         }
 
         public readonly LogSettings Settings = new LogSettings();
-        public readonly LogHistory History = new LogHistory();
+        public readonly LogHistory<TMessage> History = new LogHistory<TMessage>();
 
         readonly IMessageProvider<TMessage> messageProvider;
         readonly IColorProvider<TColor> colorProvider;
 
-        public void ShowMessage<T>(T obj, string message, MessageType messageType) {
+        public void ShowMessage<T>(T obj, TMessage message, MessageType messageType) {
             ShowMessage<T>(message, messageType);
         }
 
-        public void ShowMessage<T>(string message, MessageType messageType) {
-            ShowMessage($"{StringConverter.ConvertToString<T>()} - {message}", messageType);
+        public void ShowMessage<T>(TMessage message, MessageType messageType) {
+            var messageText = messageProvider.GetMessageText(message);
+            ShowMessage(messageProvider.CreateMessage($"{StringConverter.ConvertToString<T>()} - {messageText}"), messageType);
         }
 
-        public void ShowMessage(string message, MessageType messageType) {
-            DateTime? time;
+        public void ShowMessage(TMessage message, MessageType messageType) {
+            DateTime? time = null;
             var color = colorProvider.GetColor(messageType);
-            ShowMessageCore(out time, message, color);
+            var currentColor = colorProvider.GetCurrentColor();
+            if(Settings.ShowMessageTime) {
+                time = DateTime.Now;
+                var timeMessage = messageProvider.CreateMessage($"{time.Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
+                messageProvider.ShowMessage(timeMessage);
+            }
+            colorProvider.SetColor(color);
+            messageProvider.ShowMessageLine(message);
+            colorProvider.SetColor(currentColor);
             if(Settings.EnableHistory) {
                 History.Add(time, message, messageType);
             }
@@ -53,20 +62,9 @@ namespace TheLog {
             action.Compile()();
             stopWatch.Stop();
             var actionString = StringConverter.ConvertToString(action);
-            ShowMessage($"{actionString} ({stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})", MessageType.Default);
-        }
-
-        // TODO: Refactoring.
-        void ShowMessageCore(out DateTime? time, string messageText, TColor color) {
-            time = null;
-            var currentColor = colorProvider.GetCurrentColor();
-            if(Settings.ShowMessageTime) {
-                var message = messageProvider.CreateMessage($"{(time = DateTime.Now).Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture)}: ");
-                messageProvider.ShowMessage(message);
-            }
-            colorProvider.SetColor(color);
-            messageProvider.ShowMessageLine(messageProvider.CreateMessage(messageText));
-            colorProvider.SetColor(currentColor);
+            var executionTime = stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture);
+            var message = messageProvider.CreateMessage($"{actionString} ({executionTime})");
+            ShowMessage(message, MessageType.Default);
         }
     }
 }

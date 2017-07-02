@@ -7,6 +7,10 @@ namespace TheLog.Providers {
             return messageText;
         }
 
+        string IMessageProvider<string>.GetMessageText(string message) {
+            return message;
+        }
+
         void IMessageProvider<string>.ShowMessage(string message) {
             Console.Write(message);
         }

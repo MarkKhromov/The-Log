@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace TheLog {
-    public sealed class LogHistory {
+    public sealed class LogHistory<TMessage> {
         internal LogHistory() { }
 
-        public LogHistoryRecord[] this[MessageType messageType] {
+        public LogHistoryRecord<TMessage>[] this[MessageType messageType] {
             get { return records.Where(x => x.MessageType == messageType).ToArray(); }
         }
 
-        readonly IList<LogHistoryRecord> records = new List<LogHistoryRecord>();
-        public LogHistoryRecord[] Records {
+        readonly IList<LogHistoryRecord<TMessage>> records = new List<LogHistoryRecord<TMessage>>();
+        public LogHistoryRecord<TMessage>[] Records {
             get { return records.ToArray(); }
         }
 
@@ -19,8 +19,8 @@ namespace TheLog {
             records.Clear();
         }
 
-        internal void Add(DateTime? time, string message, MessageType messageType) {
-            records.Add(new LogHistoryRecord(time, message, messageType));
+        internal void Add(DateTime? time, TMessage message, MessageType messageType) {
+            records.Add(new LogHistoryRecord<TMessage>(time, message, messageType));
         }
     }
 }
