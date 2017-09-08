@@ -1,3 +1,5 @@
+image: Visual Studio 2017
+
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
