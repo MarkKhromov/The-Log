@@ -3,5 +3,6 @@ mono: none
 dotnet: 2.0.0
 script:
   - dotnet restore
-  - dotnet build ./TheLog.sln
+  - dotnet build ./TheLog/
+  - dotnet build ./TheLog.Demos/
   - dotnet test ./TheLog.Tests/
