@@ -8,12 +8,12 @@ namespace TheLog.Tests {
         protected Log<string, ConsoleColor> Log;
 
         [SetUp]
-        protected virtual void SetUp() {
+        public virtual void SetUp() {
             Log = Log<string, ConsoleColor>.Create(new ConsoleMessageProvider(), new ConsoleColorProvider());
         }
 
         [TearDown]
-        protected virtual void TearDown() {
+        public virtual void TearDown() {
             Log = null;
         }
     }

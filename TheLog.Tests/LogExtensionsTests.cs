@@ -6,7 +6,7 @@ using TheLog.Extensions;
 namespace TheLog.Tests {
     [TestFixture]
     public class LogExtensionsTests : LogTestFixtureBase {
-        protected override void SetUp() {
+        public override void SetUp() {
             base.SetUp();
             Log.Settings.ShowMessageTime = false;
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
