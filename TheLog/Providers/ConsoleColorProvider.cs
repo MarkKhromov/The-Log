@@ -25,7 +25,7 @@ namespace TheLog.Providers {
         }
 
         void IColorProvider<ConsoleColor>.SetColor(ConsoleColor color) {
-            Console.ForegroundColor = (ConsoleColor)color;
+            Console.ForegroundColor = color;
         }
     }
 }

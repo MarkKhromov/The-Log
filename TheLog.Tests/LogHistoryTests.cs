@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
@@ -9,38 +7,32 @@ namespace TheLog.Tests {
     public class LogHistoryTests : LogTestFixtureBase {
         [Test]
         public void GetLogRecordsByMessageTypeTest() {
-            using(var stringWriter = new StringWriter()) {
-                Console.SetOut(stringWriter);
-                Log.ShowMessage("Test message 1", MessageType.Default);
-                Log.ShowMessage("Test message 2", MessageType.Error);
-                Log.ShowMessage("Test message 3", MessageType.Error);
-                Log.ShowMessage("Test message 4", MessageType.Success);
-                Log.ShowMessage("Test message 5", MessageType.Info);
-                Log.ShowMessage("Test message 6", MessageType.Warning);
-                Assert.AreEqual(1, Log.History[MessageType.Default].Length);
-                Assert.AreEqual("Test message 1", Log.History[MessageType.Default][0].Message);
-                Assert.AreEqual(2, Log.History[MessageType.Error].Length);
-                Assert.AreEqual("Test message 2", Log.History[MessageType.Error][0].Message);
-                Assert.AreEqual("Test message 3", Log.History[MessageType.Error][1].Message);
-                Assert.AreEqual(1, Log.History[MessageType.Success].Length);
-                Assert.AreEqual("Test message 4", Log.History[MessageType.Success][0].Message);
-                Assert.AreEqual(1, Log.History[MessageType.Info].Length);
-                Assert.AreEqual("Test message 5", Log.History[MessageType.Info][0].Message);
-                Assert.AreEqual(1, Log.History[MessageType.Warning].Length);
-                Assert.AreEqual("Test message 6", Log.History[MessageType.Warning][0].Message);
-            }
+            Log.ShowMessage("Test message 1", MessageType.Default);
+            Log.ShowMessage("Test message 2", MessageType.Error);
+            Log.ShowMessage("Test message 3", MessageType.Error);
+            Log.ShowMessage("Test message 4", MessageType.Success);
+            Log.ShowMessage("Test message 5", MessageType.Info);
+            Log.ShowMessage("Test message 6", MessageType.Warning);
+            Assert.AreEqual(1, Log.History[MessageType.Default].Length);
+            Assert.AreEqual("Test message 1", Log.History[MessageType.Default][0].Message);
+            Assert.AreEqual(2, Log.History[MessageType.Error].Length);
+            Assert.AreEqual("Test message 2", Log.History[MessageType.Error][0].Message);
+            Assert.AreEqual("Test message 3", Log.History[MessageType.Error][1].Message);
+            Assert.AreEqual(1, Log.History[MessageType.Success].Length);
+            Assert.AreEqual("Test message 4", Log.History[MessageType.Success][0].Message);
+            Assert.AreEqual(1, Log.History[MessageType.Info].Length);
+            Assert.AreEqual("Test message 5", Log.History[MessageType.Info][0].Message);
+            Assert.AreEqual(1, Log.History[MessageType.Warning].Length);
+            Assert.AreEqual("Test message 6", Log.History[MessageType.Warning][0].Message);
         }
 
         [Test]
         public void ClearLogHistoryTest() {
-            using(var stringWriter = new StringWriter()) {
-                Console.SetOut(stringWriter);
-                Log.ShowMessage("Test message 1", MessageType.Default);
-                Log.ShowMessage("Test message 2", MessageType.Error);
-                Assert.AreEqual(2, Log.History.Records.Length);
-                Log.History.Clear();
-                Assert.AreEqual(0, Log.History.Records.Length);
-            }
+            Log.ShowMessage("Test message 1", MessageType.Default);
+            Log.ShowMessage("Test message 2", MessageType.Error);
+            Assert.AreEqual(2, Log.History.Records.Length);
+            Log.History.Clear();
+            Assert.AreEqual(0, Log.History.Records.Length);
         }
 
         [Test]

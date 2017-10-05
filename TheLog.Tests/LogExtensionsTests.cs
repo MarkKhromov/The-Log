@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using NUnit.Framework;
 using TheLog.Extensions;
 
@@ -9,7 +8,6 @@ namespace TheLog.Tests {
         public override void SetUp() {
             base.SetUp();
             Log.Settings.ShowMessageTime = false;
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
         }
 
         [Test]
@@ -38,11 +36,8 @@ namespace TheLog.Tests {
         }
 
         void CheckShowMessageViaMethod(string message, Action<string, Log<string, ConsoleColor>> showMessage) {
-            using(var stringWriter = new StringWriter()) {
-                Console.SetOut(stringWriter);
-                showMessage(message, Log);
-                Assert.AreEqual(message, stringWriter.ToString().Replace(Environment.NewLine, string.Empty));
-            }
+            showMessage(message, Log);
+            Assert.AreEqual(message, Writer.ToString().Replace(Environment.NewLine, string.Empty));
         }
     }
 }
