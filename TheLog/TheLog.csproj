@@ -8,6 +8,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright (c) Mark Khromov 2017</Copyright>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <PackageProjectUrl>https://github.com/MarkKhromov/The-Log</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MarkKhromov/The-Log</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\Bin\</OutputPath>
