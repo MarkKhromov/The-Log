@@ -41,20 +41,22 @@ namespace TheLog {
         }
 
         public void ShowMessage(TMessage message, MessageType messageType) {
-            DateTime? time = null;
-            var color = colorProvider.GetColor(messageType);
-            var currentColor = colorProvider.GetCurrentColor();
-            if(Settings.ShowMessageTime) {
-                time = DateTime.Now;
-                var timeString = time.Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture);
-                var timeMessage = messageProvider.CreateMessage($"{timeString}{Settings.MessageTimeSeparator}");
-                messageProvider.ShowMessage(timeMessage);
-            }
-            colorProvider.SetColor(color);
-            messageProvider.ShowMessageLine(message);
-            colorProvider.SetColor(currentColor);
-            if(Settings.EnableHistory) {
-                History.Add(time, message, messageType);
+            lock(this) {
+                DateTime? time = null;
+                var color = colorProvider.GetColor(messageType);
+                var currentColor = colorProvider.GetCurrentColor();
+                if(Settings.ShowMessageTime) {
+                    time = DateTime.Now;
+                    var timeString = time.Value.ToString(Settings.MessageTimeFormat, CultureInfo.InvariantCulture);
+                    var timeMessage = messageProvider.CreateMessage($"{timeString}{Settings.MessageTimeSeparator}");
+                    messageProvider.ShowMessage(timeMessage);
+                }
+                colorProvider.SetColor(color);
+                messageProvider.ShowMessageLine(message);
+                colorProvider.SetColor(currentColor);
+                if(Settings.EnableHistory) {
+                    History.Add(time, message, messageType);
+                }
             }
         }
 

@@ -1,26 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace TheLog {
     public sealed class LogHistory<TMessage> {
-        internal LogHistory() { }
+        internal LogHistory() {
+            records = new Collection<LogHistoryRecord<TMessage>>();
+        }
 
         public LogHistoryRecord<TMessage>[] this[MessageType messageType] {
             get { return records.Where(x => x.MessageType == messageType).ToArray(); }
         }
 
-        readonly IList<LogHistoryRecord<TMessage>> records = new List<LogHistoryRecord<TMessage>>();
+        readonly Collection<LogHistoryRecord<TMessage>> records;
         public LogHistoryRecord<TMessage>[] Records {
             get { return records.ToArray(); }
         }
 
         public void Clear() {
-            records.Clear();
+            lock(this) {
+                records.Clear();
+            }
         }
 
         internal void Add(DateTime? time, TMessage message, MessageType messageType) {
-            records.Add(new LogHistoryRecord<TMessage>(time, message, messageType));
+            lock(this) {
+                records.Add(new LogHistoryRecord<TMessage>(time, message, messageType));
+            }
         }
     }
 }

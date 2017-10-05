@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 
 namespace TheLog.Tests {
@@ -39,6 +41,38 @@ namespace TheLog.Tests {
                 Log.History.Clear();
                 Assert.AreEqual(0, Log.History.Records.Length);
             }
+        }
+
+        [Test]
+        public void AddRecordFromSeveralThreadsTest() {
+            Log.Settings.ShowMessageTime = false;
+            Log.Settings.EnableHistory = true;
+            var threads = Enumerable.Range(0, 11).Select(x => {
+                return new Thread(() => {
+                    var messageType = (x & 1) == 0 ? MessageType.Info : MessageType.Success;
+                    Log.ShowMessage($"Test message {x}", messageType);
+                });
+            }).ToArray();
+            threads.ToList().ForEach(x => x.Start());
+            foreach(var thread in threads) {
+                thread.Join();
+            }
+            Assert.AreEqual(11, Log.History.Records.Length);
+            var infos = Log.History[MessageType.Info];
+            Assert.AreEqual(6, infos.Length);
+            var successes = Log.History[MessageType.Success];
+            Assert.AreEqual(5, successes.Length);
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 0"));
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 2"));
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 4"));
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 6"));
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 8"));
+            Assert.IsTrue(infos.Any(x => x.Message == "Test message 10"));
+            Assert.IsTrue(successes.Any(x => x.Message == "Test message 1"));
+            Assert.IsTrue(successes.Any(x => x.Message == "Test message 3"));
+            Assert.IsTrue(successes.Any(x => x.Message == "Test message 5"));
+            Assert.IsTrue(successes.Any(x => x.Message == "Test message 7"));
+            Assert.IsTrue(successes.Any(x => x.Message == "Test message 9"));
         }
     }
 }
