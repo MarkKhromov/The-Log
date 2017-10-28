@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq.Expressions;
+using System.Text;
 using TheLog.Providers.Base;
+using TheLog.Settings;
 
 namespace TheLog {
     public sealed class Log<TMessage, TColor> {
@@ -56,6 +59,12 @@ namespace TheLog {
                 colorProvider.SetColor(currentColor);
                 if(Settings.EnableHistory) {
                     History.Add(time, message, messageType);
+                }
+                if(Settings.FileSettings.AllowWriteToFile) {
+                    using(var streamWriter = new StreamWriter(Settings.FileSettings.FileName, true, Encoding.UTF8))
+                    using(var synchronizedTextWriter = TextWriter.Synchronized(streamWriter)) {
+                        synchronizedTextWriter.WriteLine(message);
+                    }
                 }
             }
         }

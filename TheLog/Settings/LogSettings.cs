@@ -1,4 +1,4 @@
-﻿namespace TheLog {
+﻿namespace TheLog.Settings {
     public sealed class LogSettings {
         internal LogSettings() { }
 
@@ -9,5 +9,7 @@
 
         public string MessageTimeFormat = @"HH:mm:ss";
         public string ExecutionTimeFormat = @"mm\:ss\.fff";
+
+        public readonly LogFileSettings FileSettings = new LogFileSettings();
     }
 }
