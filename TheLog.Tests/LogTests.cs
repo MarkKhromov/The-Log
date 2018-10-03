@@ -46,16 +46,5 @@ namespace TheLog.Tests {
             var expectedString = "Int32 - Test message";
             Assert.AreEqual(expectedString, Writer.ToString().Replace(Environment.NewLine, string.Empty));
         }
-
-        [Test]
-        public void ShowExecutionTimeTest() {
-            Log.ShowExecutionTime(() => TestClass.Sleep(1));
-            var resultString = Writer.ToString();
-            var executionTimeString = resultString.Substring(resultString.LastIndexOf('(') + 1);
-            executionTimeString = executionTimeString.Remove(executionTimeString.LastIndexOf(')'));
-            var executionTime = TimeSpan.ParseExact(executionTimeString, Log.Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture);
-            var expectedString = $"() => Sleep(1) ({executionTime.ToString(Log.Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture)})";
-            Assert.AreEqual(expectedString, Writer.ToString().Replace(Environment.NewLine, string.Empty));
-        }
     }
 }

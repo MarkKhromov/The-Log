@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace TheLog {
     static class StringConverter {
@@ -10,11 +9,6 @@ namespace TheLog {
 
         public static string ConvertToString(Type type) {
             return GetGenericTypeString(type);
-        }
-
-        public static string ConvertToString(Expression<Action> action) {
-            // TODO: Improve expression convertion to string
-            return action.ToString();
         }
 
         static string GetGenericTypeString(Type type) {

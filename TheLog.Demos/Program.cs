@@ -16,7 +16,6 @@ namespace TheLog.Demos {
 
             Log.ShowMessage<DataContainer<int, Data<string>>>("Start initializing", MessageType.Info);
             new DataContainer<int, Data<string>>();
-            Log.ShowExecutionTime(() => Sleep(1));
             Console.ReadKey();
         }
 

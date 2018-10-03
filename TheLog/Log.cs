@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq.Expressions;
 using System.Text;
 using TheLog.Providers.Base;
 using TheLog.Settings;
@@ -67,16 +65,6 @@ namespace TheLog {
                     }
                 }
             }
-        }
-
-        public void ShowExecutionTime(Expression<Action> action) {
-            var stopWatch = Stopwatch.StartNew();
-            action.Compile()();
-            stopWatch.Stop();
-            var actionString = StringConverter.ConvertToString(action);
-            var executionTime = stopWatch.Elapsed.ToString(Settings.ExecutionTimeFormat, CultureInfo.InvariantCulture);
-            var message = messageProvider.CreateMessage($"{actionString} ({executionTime})");
-            ShowMessage(message, MessageType.Default);
         }
     }
 }
