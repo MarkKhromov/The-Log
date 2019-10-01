@@ -8,7 +8,6 @@
         public string MessageTimeSeparator = ": ";
 
         public string MessageTimeFormat = @"HH:mm:ss";
-        public string ExecutionTimeFormat = @"mm\:ss\.fff";
 
         public readonly LogFileSettings FileSettings = new LogFileSettings();
     }
